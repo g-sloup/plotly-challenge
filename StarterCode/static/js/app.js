@@ -1,43 +1,35 @@
- // Build the demographic info panel
-  // Use `d3.json` to fetch the metadata for a sample
+// Build the demographic info panel
+// Use `d3.json` to fetch the metadata for a sample
   function buildMetadata(sampleID) {
     d3.json("samples.json").then((importedData) => {
       console.log(importedData);
-      var data = importedData.metadata.filter(sample => sample.id == sampleID)[0]
-      var demoInfo = d3.select("#sample-metadata")
+
+      var metaData = importedData.metadata.filter(sample => sample.id == sampleID)[0]
+      var demoPanel = d3.select("#sample-metadata")
       // Clear any existing metadata
-      demoInfo.html("")
+      demoPanel.html("")
       // Add each key and value pair to the panel
-      Object.entries(data).forEach(([key, value]) => {
-        demoInfo.append("h6").text(key+": " + value)
+      Object.entries(metaData).forEach(([key, value]) => {
+        demoPanel.append("h6").text(key+": " + value)
       })
 
     })
   }
-
   buildMetadata(940)
-
-  // init();
-  // var data = importedData.metadata.filter(sample => sample.id)
-  // Use `d3.json` to fetch the metadata for a sample
-    // Use d3 to select the panel with id of `#sample-metadata`
-
-    // Use `.html("") to clear any existing metadata
-
-    // Use `Object.entries` to add each key and value pair to the panel
-    // Hint: Inside the loop, you will need to use d3 to append new
-    // tags for each key-value in the metadata.
 
     // BONUS: Build the Gauge Chart
     // buildGauge(data.WFREQ);
-// 
 
-// function buildCharts(sample) {
+// function buildPlots(sample) {
+//   d3.json("samples.json").then((importedData) => {
 
-//   // @TODO: Use `d3.json` to fetch the sample data for the plots
+// @TODO: Use `d3.json` to fetch the sample data for the plots
 
-//     // Create a horizontal bar chart with a dropdown menu 
-//     // to display the top 10 OTUs found in that individual.
+    // @TODO: Build a Horizontal Bar Chart
+    // HINT: You will need to use slice() to grab the top 10 sample_values,
+    // otu_ids, and labels (10 each).
+// Create a horizontal bar chart with a dropdown menu 
+// to display the top 10 OTUs found in that individual.
 //     var trace1 = {
 //       x: data.map(row => row.sample_values),
 //       y: data.map(row => row.otu_ids),
@@ -58,54 +50,37 @@
 //       }
 //     };
 
-//     // @TODO: Build a Bubble Chart using the sample data
+    // @TODO: Build a Bubble Chart using the sample data
 
-//     // @TODO: Build a Horizontal Bar Chart
-//     // HINT: You will need to use slice() to grab the top 10 sample_values,
-//     // otu_ids, and labels (10 each).
-// }
+function init() {
+  // Grab a reference to the dropdown select element
+  var selector = d3.select("#selDataset");
 
-// function init() {
-//   // Grab a reference to the dropdown select element
-//   var selector = d3.select("#selDataset");
+  // Use the list of sample names to populate the select options
+  d3.json("samples.json").then((importedData) => {
+    var subjectID = importedData.names;
+    subjectID.forEach((subject) => {
+      selector
+        .append("option")
+        .text(subject)
+        .property("value", subject);
+    });
 
-//   // Use the list of sample names to populate the select options
-//   d3.json("/names").then((sampleNames) => {
-//     sampleNames.forEach((sample) => {
-//       selector
-//         .append("option")
-//         .text(sample)
-//         .property("value", sample);
-//     });
+    // Use the first sample from the list to build the initial plots
+    const firstSample = subjectID[0];
+    buildPlots(firstSample);
+    buildMetadata(firstSample);
+  });
+}
 
-//     // Use the first sample from the list to build the initial plots
-//     const firstSample = sampleNames[0];
-//     buildCharts(firstSample);
-//     buildMetadata(firstSample);
-//   });
-// }
+function optionChanged(newSample) {
+  // Fetch new data each time a new sample is selected
+  buildPlots(newSample);
+  buildMetadata(newSample);
+}
 
-// function optionChanged(newSample) {
-//   // Fetch new data each time a new sample is selected
-//   buildCharts(newSample);
-//   buildMetadata(newSample);
-// }
-
-// // Initialize the dashboard
-// init();
-
-
-// // build dropdown menus of "names"
-//   // Use D3 to select the dropdown menu
-//   var dropdownMenu = d3.select("#selDataset");
-//   // Assign the value of the dropdown menu option to a variable
-//   var dataset = dropdownMenu.property("value");
-
-// // function buildMetadata(sample) {
-
-// // Use d3.json() to fetch data from JSON file
-// d3.json("data/samples.json").then((data) => {
-//   console.log(data);
+// Initialize the dashboard
+init();
 
 
       
@@ -114,8 +89,7 @@
 //     //     return parseFloat(b.sample_values) - parseFloat(a.sample_values);
 //     // });
 
-//     // Slice the first 10 objects for plotting
-//     topOTU = data.slice(0, 10);
+
 
 //     // Reverse the array due to Plotly's defaults
 //     // data = data.reverse(); 
