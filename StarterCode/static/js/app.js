@@ -1,11 +1,22 @@
-
-
-  // @TODO: Complete the following function that builds the metadata panel
+ // Build the demographic info panel
+  // Use `d3.json` to fetch the metadata for a sample
   function buildMetadata(sampleID) {
     d3.json("samples.json").then((importedData) => {
       console.log(importedData);
+      var data = importedData.metadata.filter(sample => sample.id == sampleID)[0]
+      var demoInfo = d3.select("#sample-metadata")
+      // Clear any existing metadata
+      demoInfo.html("")
+      // Add each key and value pair to the panel
+      Object.entries(data).forEach(([key, value]) => {
+        demoInfo.append("h6").text(key+": " + value)
+      })
+
     })
   }
+
+  buildMetadata(940)
+
   // init();
   // var data = importedData.metadata.filter(sample => sample.id)
   // Use `d3.json` to fetch the metadata for a sample
