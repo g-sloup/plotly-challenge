@@ -20,24 +20,36 @@
     // BONUS: Build the Gauge Chart
     // buildGauge(data.WFREQ);
 
-// function buildPlots(sample) {
-//   d3.json("samples.json").then((importedData) => {
+// Use `d3.json` to fetch the sample data for the plots
+function buildPlots(importedData) {
+  d3.json("samples.json").then((importedData) => {
+    var sampleData = importedData.samples.filter(sample => sample.id)
+    var otuIds = sampleData.otu_ids
+    var sampleValues = sampleData.sample_values
+    vara otuLabels = sampleData.otu_labels
 
-// @TODO: Use `d3.json` to fetch the sample data for the plots
+// Build a Horizontal Bar Chart to display the top 10 OTUs found in that individual
 
-    // @TODO: Build a Horizontal Bar Chart
-    // HINT: You will need to use slice() to grab the top 10 sample_values,
-    // otu_ids, and labels (10 each).
-// Create a horizontal bar chart with a dropdown menu 
-// to display the top 10 OTUs found in that individual.
-//     var trace1 = {
-//       x: data.map(row => row.sample_values),
-//       y: data.map(row => row.otu_ids),
-//       text: data.map(row => row.otu_labels),
-//       // name: "Greek",
-//       type: "bar",
-//       orientation: "h"
-//   };
+
+//     // * Use `otu_ids` for the x values.
+    
+//     // * Use `sample_values` for the y values.
+    
+//     // * Use `sample_values` for the marker size.
+    
+//     // * Use `otu_ids` for the marker colors.
+    
+//     // * Use `otu_labels` for the text values.
+
+
+  //   var trace1 = {
+  //     x: data.map(row => row.sample_values),
+  //     y: data.map(row => row.otu_ids),
+  //     text: data.map(row => row.otu_labels),
+  //     // name: "Greek",
+  //     type: "bar",
+  //     orientation: "h"
+  // };
 
 //   var trace2 = {
 //       x: data.map(row => row.sample_values),
@@ -93,33 +105,10 @@ init();
 
 //     // Reverse the array due to Plotly's defaults
 //     // data = data.reverse(); 
-
-
-    
-//       // Initializes the page with a default plot
-// function init() {
-
-
-//     //   ![bar Chart](Images/hw01.png)
     
 //     // 3. Create a bubble chart that displays each sample.
     
-//     // * Use `otu_ids` for the x values.
+
     
-//     // * Use `sample_values` for the y values.
-    
-//     // * Use `sample_values` for the marker size.
-    
-//     // * Use `otu_ids` for the marker colors.
-    
-//     // * Use `otu_labels` for the text values.
-    
-//     // ![Bubble Chart](Images/bubble_chart.png)
-    
-//     // 4. Display the sample metadata, i.e., an individual's demographic information.
-    
-//     // 5. Display each key-value pair from the metadata JSON object somewhere on the page.
-    
-//     // ![hw](Images/hw03.png)
     
 //     // 6. Update all of the plots any time that a new sample is selected
