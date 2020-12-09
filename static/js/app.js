@@ -21,12 +21,12 @@
     // buildGauge(data.WFREQ);
 
 // Use `d3.json` to fetch the sample data for the plots
-function buildPlots(importedData) {
+function buildPlots(samples) {
   d3.json("samples.json").then((importedData) => {
-    var sampleData = importedData.samples.filter(sample => sample.id)
+    var sampleData = importedData.samples.filter(sample => sample.id == samples)
     var otuIds = sampleData.otu_ids
     var sampleValues = sampleData.sample_values
-    vara otuLabels = sampleData.otu_labels
+    var otuLabels = sampleData.otu_labels
 
 // Build a Horizontal Bar Chart to display the top 10 OTUs found in that individual
 
