@@ -1,16 +1,18 @@
 // Build the demographic info panel
 // Use `d3.json` to fetch the metadata for a sample
   function buildMetadata(sampleID) {
-    d3.json("samples.json").then((importedData) => {
+    d3.json("data/samples.json").then((importedData) => {
       console.log(importedData);
 
       var metaData = importedData.metadata.filter(sample => sample.id == sampleID)[0]
       var demoPanel = d3.select("#sample-metadata")
+      
       // Clear any existing metadata
       demoPanel.html("")
+      
       // Add each key and value pair to the panel
       Object.entries(metaData).forEach(([key, value]) => {
-        demoPanel.append("h6").text(key+": " + value)
+        demoPanel.append("h6").text(`${key}: ${value}`)
       })
 
     })
@@ -21,55 +23,59 @@
     // buildGauge(data.WFREQ);
 
 // Use `d3.json` to fetch the sample data for the plots
-function buildPlots(samples) {
-  d3.json("samples.json").then((importedData) => {
+// function buildPlots(samples) {
+  d3.json("data/samples.json").then((importedData) => {
     var sampleData = importedData.samples.filter(sample => sample.id == samples)
     var otuIds = sampleData.otu_ids
     var sampleValues = sampleData.sample_values
     var otuLabels = sampleData.otu_labels
 
-// Build a Horizontal Bar Chart to display the top 10 OTUs found in that individual
+  // Build a Horizontal Bar Chart to display the top 10 OTUs found in that individual
+  var trace1 = {
+    x: otuIds.slice(0,10).reverse(),
+    y: sampleValues.slice(0,10).reverse(),
+    text: otuLabels.slice(0,10).reverse(),
+    type: "bar",
+    orientation: "h"
+  };
 
+  var barData = [trace1];
 
-//     // * Use `otu_ids` for the x values.
-    
-//     // * Use `sample_values` for the y values.
-    
-//     // * Use `sample_values` for the marker size.
-    
-//     // * Use `otu_ids` for the marker colors.
-    
-//     // * Use `otu_labels` for the text values.
+  var barLayout = {
+    title: "Top 10 OTUs Per Subject",
+  };
 
+  // plot bar plot
+  Plotly.newPlot("bar", barData, barLayout);
 
-  //   var trace1 = {
-  //     x: data.map(row => row.sample_values),
-  //     y: data.map(row => row.otu_ids),
-  //     text: data.map(row => row.otu_labels),
-  //     // name: "Greek",
-  //     type: "bar",
-  //     orientation: "h"
-  // };
+  // Build a Bubble Chart using the sample data
+  var trace2 = {
+    x: otuIds,
+    y: sampleValues,
+    text: otuLabels,
+    mode: "markers",
+    marker: {
+      color: otuIds,
+      size: sampleValues
+      }
+    };
 
-//   var trace2 = {
-//       x: data.map(row => row.sample_values),
-//       y: data.map(row => row.otu_ids),
-//       mode: 'markers',
-//       marker: {
-//         color: ['rgb(93, 164, 214)', 'rgb(255, 144, 14)',  'rgb(44, 160, 101)', 'rgb(255, 65, 54)'],
-//         opacity: [1, 0.8, 0.6, 0.4],
-//         size: [40, 60, 80, 100]
-//       }
-//     };
+  var bubbleData = [trace2];
 
-    // @TODO: Build a Bubble Chart using the sample data
+  var bubbleLayout = {
+    title: "OTUs Sample Measurements"
+  };
+  
+  Plotly.newPlot("bubble", bubbleData, bubbleLayout);
+
+};
 
 function init() {
   // Grab a reference to the dropdown select element
   var selector = d3.select("#selDataset");
 
   // Use the list of sample names to populate the select options
-  d3.json("samples.json").then((importedData) => {
+  d3.json("data/samples.json").then((importedData) => {
     var subjectID = importedData.names;
     subjectID.forEach((subject) => {
       selector
