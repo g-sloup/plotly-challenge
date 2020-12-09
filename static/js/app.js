@@ -23,26 +23,26 @@
     // buildGauge(data.WFREQ);
 
 // Use `d3.json` to fetch the sample data for the plots
-// function buildPlots(samples) {
+function buildPlots(sampleID) {
   d3.json("data/samples.json").then((importedData) => {
-    var sampleData = importedData.samples.filter(sample => sample.id == samples)
+    var sampleData = importedData.samples.filter(sample => sample.id == sampleID)[0]
+    
     var otuIds = sampleData.otu_ids
     var sampleValues = sampleData.sample_values
-    var otuLabels = sampleData.otu_labels
+    var otuLabels = sampleData.otu_labels   
 
   // Build a Horizontal Bar Chart to display the top 10 OTUs found in that individual
   var trace1 = {
-    x: otuIds.slice(0,10).reverse(),
-    y: sampleValues.slice(0,10).reverse(),
+    x: sampleValues.slice(0,10).reverse(),
+    y: otuIds.slice(0,10).map(otuIds => `OTU${otuIds}`).reverse(),
     text: otuLabels.slice(0,10).reverse(),
     type: "bar",
     orientation: "h"
   };
 
   var barData = [trace1];
-
   var barLayout = {
-    title: "Top 10 OTUs Per Subject",
+    title: `Top 10 OTUs for Subject ${sampleID}`,
   };
 
   // plot bar plot
@@ -61,14 +61,14 @@
     };
 
   var bubbleData = [trace2];
-
   var bubbleLayout = {
-    title: "OTUs Sample Measurements"
+    title: `All OTU Values for Subject ${sampleID}`
   };
   
   Plotly.newPlot("bubble", bubbleData, bubbleLayout);
 
-};
+})
+}
 
 function init() {
   // Grab a reference to the dropdown select element
@@ -99,22 +99,3 @@ function optionChanged(newSample) {
 
 // Initialize the dashboard
 init();
-
-
-      
-//     // // Sort the data array 
-//     // data.sort(function(a, b) {
-//     //     return parseFloat(b.sample_values) - parseFloat(a.sample_values);
-//     // });
-
-
-
-//     // Reverse the array due to Plotly's defaults
-//     // data = data.reverse(); 
-    
-//     // 3. Create a bubble chart that displays each sample.
-    
-
-    
-    
-//     // 6. Update all of the plots any time that a new sample is selected
